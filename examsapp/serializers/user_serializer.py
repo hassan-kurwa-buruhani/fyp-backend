@@ -76,9 +76,12 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         # For students, no extra checks; login with username and password only
 
         # Optionally, add role to token response
+        data['id'] = user.id
+        data['username'] = user.username
         data['role'] = user.role
         data['first_name'] = user.first_name
         data['last_name'] = user.last_name
+        data['email'] = user.email
         return data
     
 
@@ -121,3 +124,46 @@ class StudentRegistrationSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+
+
+class UserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(read_only=True)
+    role = serializers.CharField(read_only=True)
+    new_password = serializers.CharField(write_only=True, required=False)
+    verify_password = serializers.CharField(write_only=True, required=False)
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'role', 'new_password', 'verify_password')
+
+    def validate(self, data):
+        new_password = data.get('new_password')
+        verify_password = data.get('verify_password')
+
+        # If either is provided, both must be present and match
+        if new_password or verify_password:
+            if not new_password:
+                raise serializers.ValidationError({"new_password": "This field is required."})
+            if not verify_password:
+                raise serializers.ValidationError({"verify_password": "This field is required."})
+            if new_password != verify_password:
+                raise serializers.ValidationError({"verify_password": "Passwords do not match."})
+            if len(new_password) < 4:
+                raise serializers.ValidationError({"new_password": "Password must be at least 8 characters long."})
+
+        return data
+
+    def update(self, instance, validated_data):
+        new_password = validated_data.pop('new_password', None)
+        validated_data.pop('verify_password', None)  # Remove it; only used for validation
+
+        # Update fields like first_name, last_name, etc.
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        # If new_password was provided, update password
+        if new_password:
+            instance.set_password(new_password)
+
+        instance.save()
+        return instance

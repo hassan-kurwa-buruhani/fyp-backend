@@ -26,13 +26,14 @@ SECRET_KEY = 'django-insecure-6j4w)^vz%j4sf&-^v2xmydhg#^ro=__m$+pqc=k87i%m=olh+g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'examsapp',
+    'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -52,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 REST_FRAMEWORK = {
@@ -70,8 +72,8 @@ SIMPLE_JWT = {
 }
 
 # Example campus center and radius (in meters)
-CAMPUS_CENTER = {'lat': -6.1658, 'lng': 39.1918}  # Nairobi coordinates for example
-CAMPUS_RADIUS_METERS = 706  # 500m radius around center
+CAMPUS_CENTER = {'lat': -6.1658, 'lng': 39.1918}  # coordinates of campus center
+CAMPUS_RADIUS_METERS = 20000000000000000000  # meters radius around center
 
 
 ROOT_URLCONF = 'config.urls'

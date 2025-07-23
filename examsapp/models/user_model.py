@@ -7,6 +7,7 @@ class Roles(models.TextChoices):
     LECTURER = 'Lecturer', _('Lecturer')
     INVIGILATOR = 'Invigilator', _('Invigilator')   
     STUDENT = 'Student', _('Student')
+    OFFICIAL = 'Official', _('Official')
 
 class User(AbstractUser):
     role = models.CharField(max_length=20, choices=Roles.choices)

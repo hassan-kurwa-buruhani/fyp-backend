@@ -72,6 +72,9 @@ SIMPLE_JWT = {
     ),
 }
 
+
+CORS_ALLOW_ALL_ORIGINS = True
+
 # Example campus center and radius (in meters)
 CAMPUS_CENTER = {'lat': -6.1658, 'lng': 39.1918}  # coordinates of campus center
 CAMPUS_RADIUS_METERS = 20000000000000000000  # meters radius around center

@@ -3,7 +3,7 @@ from .course_exam_model import Exam
 
 class Question(models.Model):
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE, related_name='questions')
-    question_number = models.CharField(10, unique=True)
+    question_number = models.CharField(10)
     question_text = models.TextField()
     marks = models.FloatField(default=0, null=True, blank=True)
 

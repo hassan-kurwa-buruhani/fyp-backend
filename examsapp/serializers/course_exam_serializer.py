@@ -16,6 +16,7 @@ class CourseSerializer(serializers.ModelSerializer):
 class ExamSerializer(serializers.ModelSerializer):
     course = serializers.SlugRelatedField(slug_field='code', queryset=Course.objects.all())
     course_name = serializers.SerializerMethodField()
+    read_only_fields = ['created_by', 'created', 'updated']
 
     def get_course_name(self, obj):
         return f"{obj.course.name}"
